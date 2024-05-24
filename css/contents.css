@@ -1,0 +1,94 @@
+@charset "utf-8";
+
+/* CSS Document */
+
+:root {
+    --color-just-black: #0e100f;
+    --color-surface-white: #fffce1;
+    --color-shockingly-green: #0ae448;
+    --color-surface50: #7c7c6f;
+}
+
+/*********************************************/
+
+ul.btn-list {
+    align-items: flex-start;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.tag-btn { 
+    border: 2px solid var(--color-just-black);
+    color: var(--color-just-black);
+    align-items: center;
+    border-radius: 99px;
+    cursor: pointer;
+    display: flex;
+    flex: 0 0 auto;
+    font-size: 13px;
+    gap: 8px;
+    justify-content: center;
+    margin: 5px;
+    max-width: 130px;
+    padding: .3rem 2rem;
+    position: relative;
+    white-space: nowrap;
+}
+
+.tag-btn.selected {
+    background-color: var(--color-just-black);
+    color: var(--color-surface-white);
+}
+
+.tag-btn input {
+    opacity: 0;
+    position: absolute;
+}
+
+.tag-btn input + span {
+    border-radius: 99px;
+    height: 100%;
+    pointer-events: none;
+    width: 100%;
+}
+
+ul.item-list {
+    --gap: 1rem;
+    --min: 350px;
+    grid-gap: var(--gap);
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, var(--min)), 1fr));
+}
+
+ul.item-list > li.active {
+    margin-top: max(1.5rem, min(3vw + 2.72573rem, 3rem)) !important;
+}
+
+.tag-item > img {
+    aspect-ratio: 16 / 9;
+    background-color: var(--color-surface50);
+    border-radius: 10px;
+    width: 100%;
+}
+
+.tag-item > .desc {
+    margin-top: .75rem;
+    color: var(--color-just-black);
+}
+
+
+.tag-item > .desc h2 {
+    font-size: 3rem;
+    line-height: 1.5;
+    font-weight: 400;
+    letter-spacing: -.01em;
+}
+
+.tag-item > .desc span {
+    color: var(--color-surface50);
+    font-size: 2rem;
+    font-weight: 400;
+    letter-spacing: -.01em;
+    line-height: 1.2;
+    padding: 0 .75rem;
+}
