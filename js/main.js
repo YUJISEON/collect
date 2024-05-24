@@ -56,36 +56,28 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
     }
 
-
-
     function updateFilters(filter) {
-        const items = gsap.utils.toArray('.tag-item');
-        const state = Flip.getState(items); // get the current state  
+        const items = gsap.utils.toArray(itemList.querySelectorAll('li'));
+        const state = Flip.getState(items); 
 
-        console.log(state);
-        
-        // adjust the display property of each item ("none" for filtered ones, "inline-flex" for matching ones)
         items.forEach(item => {
-            item.style.display = item.parentElement.classList.contains(filter) == false ? "none" : "inline";
-            if( item.parentElement.classList.contains(filter) ) {
-                item.parentElement.classList.add('active');
+            item.style.display = item.classList.contains(filter) == false ? "none" : "block";
+            if( item.classList.contains(filter) ) {
+                item.classList.add('active');
             } else {
-                item.parentElement.classList.remove('active');
+                item.classList.remove('active');
             }
         });
-        //createList(filter);
         
-        // animate from the previous state
         Flip.from(state, {
             duration: 0.3,
+            // absolute: true,
+            // fade: true,
             scale: true,
             ease: "power1.inOut",
             stagger: 0.08,
-            absolute: true,
             onEnter: (elements) => {
-                console.log(elements);
-
-                gsap.fromTo("onEnter", elements, {
+                gsap.fromTo(elements, {
                     opacity: 0, 
                     scale:0
                 }, {
@@ -96,8 +88,6 @@ document.addEventListener("DOMContentLoaded", (event) => {
                 })
             },
             onLeave: (elements) => {
-                console.log("onLeave", elements);
-
                 gsap.to(elements, {
                     opacity: 0, 
                     duration: .3
@@ -109,6 +99,10 @@ document.addEventListener("DOMContentLoaded", (event) => {
     tags.forEach( tag => {
         tag.addEventListener('click', function() {
             filter = tag.parentElement.getAttribute('data-tag');
+            tags.forEach( t =>  t.classList.remove('selected'))
+            if( !tag.classList.contains('selected') ) {
+                tag.classList.add('selected');
+            } 
             updateFilters(filter);
         })
     })
