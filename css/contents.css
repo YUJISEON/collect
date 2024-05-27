@@ -64,11 +64,17 @@ ul.item-list > li.active {
     margin-top: max(1.5rem, min(3vw + 2.72573rem, 3rem)) !important;
 }
 
-.tag-item > img {
-    aspect-ratio: 16 / 9;
-    background-color: var(--color-surface50);
+.tag-item .img {
+    border: 1px solid var(--color-surface50);
     border-radius: 10px;
+    overflow: hidden;
+    padding: 5px;
+}
+
+.tag-item .img img {
+    aspect-ratio: 16 / 9;
     width: 100%;
+    object-fit:contain;
 }
 
 .tag-item > .desc {
@@ -85,10 +91,14 @@ ul.item-list > li.active {
 }
 
 .tag-item > .desc span {
-    color: var(--color-surface50);
+    color: #fff;
     font-size: 2rem;
     font-weight: 400;
     letter-spacing: -.01em;
     line-height: 1.2;
     padding: 0 .75rem;
+    display: inline-block;
+    background-color: var(--color-surface50);
+    border-radius: 5px;
+    padding: 5px;
 }

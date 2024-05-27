@@ -33,16 +33,174 @@
                 <div class="cont-area"> 
                     <div class="chart-box">
                         <div class="chart-div">
-                            <canvas id="chart-div" height="650"></canvas>
+                            <canvas id="chartdiV" height="650"></canvas>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>  
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
+    document.addEventListener("DOMContentLoaded", () => { 
+        // 라인 차트를 생성하는 함수
+        function createChart(ctx, newDataArray) {
+        
+            return new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: newDataArray.date,
+                    datasets: Object.values(newDataArray.datas).map(function (dataArray, index) {
+                        var borderColor = borderColorArray[index % borderColorArray.length];
+                        
+                        return {
+                            label: dataArray.name,
+                            data: dataArray.data,
+                            borderColor: borderColor,
+                            borderWidth: 1,
+                            pointBackgroundColor: borderColor,
+                            fill: false,
+                        };
+                    }),
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            title: {
+                                display: false,
+                                text: '날짜',
+                            },
+                            ticks: {
+                                display: newDataArray.ticks,
+                                
+                            },
+                        },
+                        y: {
+                            title: {
+                                display: false,
+                                text: '값',
+                            },
+                            ticks: {
+                                stepSize: newDataArray.step,
+                                
+                            },
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            align: 'start',
+                            labels: {
+                                boxWidth: 40,
+                                padding: 10,
+                                font: {
+                                    size: 14,
+                                },
+                            },
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) { 
 
+                                    let label = context.dataset.label || '';
+
+                                    if (label) {
+                                        label += ' : ';
+                                    }
+
+                                    if (context.parsed.y !== null) {
+                                        if (newDataArray.util) {
+                                            label += context.parsed.y.toLocaleString() + 'kw'; 
+                                        } else {
+                                            label += context.parsed.y.toLocaleString(); 
+                                        }
+                                    }
+
+                                    return label;
+                                }
+                            }
+                        }
+                    },
+                    layout: {
+                        padding: {
+                            top: 50,
+                            left: 20,
+                            right: 30,
+                            bottom: 50,
+                        },
+                    },
+                },
+            });
+        }
+
+        // 데이터를 가져오고 차트를 생성하는 함수
+        function getChartData(url, ctx) {
+            $.ajax({
+                url: url,
+                type : 'GET',
+                dataType: 'json',
+                success: function (_data) {
+                    createChart(ctx, _data);
+                },
+                error: function (error) {
+                    console.error('데이터를 가져오는 동안 오류 발생:', error);
+                },
+            });
+        }
+
+        // 공통 데이터 - 색상
+        var borderColorArray = ['#FF0000', '#FF4500', '#006400', '#008080', '#0000FF', '#483D8B', '#FF00FF', '#800080', '#2F4F4F', '#000000', '#800000', '#D2691E', '#F4A460', '#FFDEAD', '#FFE4E1', '#DCDCDC', '#FFC0CB', '#B0E0E6', '#66CDAA', '#FFFF00'];
+
+
+        // 각 섹션에 대한 데이터를 가져와 차트를 생성합니다.
+        getChartData('getData.json', document.getElementById('chartdiV').getContext('2d'));
+
+        /*
+            차트 옵션 설명
+            -step : 데이터 눈금 단위
+            -date : 데이터 날짜
+            -ticks : 데이터 날짜 노출 여부
+            -util : 'kw' 단위 노출 여부
+            -datas : 데이터 및 데이터명
+
+            {
+                
+                "step": 10000,
+                "date": [
+                    "11/1 11:00",
+                    "11/1 11:15",
+                    "11/1 11:30",
+                    "11/1 11:45",
+                    "11/1 12:00",
+                    "11/1 12:15",
+                    "11/1 12:30"
+                ],
+                "ticks": false,
+                "util": true,
+                "datas": [
+                    {
+                        "data": [0, 10000, 20000, 30000, 40000, 50000, 0],
+                        "name": "설비목록 1"
+                    },
+                    {
+                        "data": [10000, 20000, 30000, 40000, 50000, 0, 10000],
+                        "name": "설비목록 2"
+                    },
+                    {
+                        "data": [20000, 30000, 40000, 50000, 0, 10000, 20000],
+                        "name": "설비목록 3"
+                    },
+                    {
+                        "data": [5000, 200, 30, 500, 130, 1100, 2],
+                        "name": "설비목록 4"
+                    }
+                ]
+            }
+        */
+    })
     </script>
 </body>
 </html>
