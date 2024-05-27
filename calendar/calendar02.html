@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YUJISEON Collect</title>
+    <link rel="stylesheet" href="../css/rest.css">
+    <link rel="stylesheet" href="../css/common.css">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="./calendar.css">
+</head>
+<body>
+    <section class="section">
+        <div class="section-body">
+            <div class="section-inner">
+                <div class="cont-area"> 
+                    <div class="datepicker-area">        
+                        <div class="inner">
+                            <div id="datepicker" class="calendar"></div> 
+                            <div class="result-wrap  flex-box justify-content-between align-items-center">
+                                <a href="javascript:;" class="svg svg-bg reset" onclick="dateReset();">새로고침</a>
+                                <div class="date-box flex-box justify-content-between align-items-center">
+                                    <p id="startDate"></p>
+                                    <span>~</span>
+                                    <p id="endDate"></p>
+                                </div>
+                            </div>
+                            <ul class="day-state type2">
+                                <li><b class="full"></b><span>예약마감</span></li>
+                                <li><b class="disabled"></b><span>휴무</span></li>                                                
+                                <li><b class="peak"></b><span>성수기</span></li>
+                            </ul>  
+                            <input type="hidden" name="reservdate" id="reservdate" value="">
+                        </div>     
+                    </div> 
+                </div>
+            </div>
+        </div>
+    </div>  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="../js/jquery-ui.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-ui-multidatespicker/1.6.6/jquery-ui.multidatespicker.min.js"></script>
+    <script>
+        $(function() {
+            init();
+            todaySet();  
+        });
+
+        function init() {
+
+            var clickCount = 0;
+            var startDate = null;
+
+            // 기본 설정
+            $.datepicker.setDefaults({
+                dateFormat: 'yy-mm-dd',
+                prevText: '이전 달',
+                nextText: '다음 달',
+                monthNames: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
+                monthNamesShort: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
+                dayNames: ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'],
+                dayNamesShort: ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'],
+                dayNamesMin: ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'],
+                showMonthAfterYear: true,
+                yearSuffix: '년',
+                showOtherMonths: true,
+                selectOtherMonths: true
+            });
+            
+            // Datepicker 초기화
+            $("#datepicker").datepicker({
+                firstDay: 0,
+                minDate: 0
+            });
+
+            // 비활성화할 날짜 배열
+            var peakSeasonDates = ["2024-06-20", "2024-06-21"]; // 성수기
+            var unavailableDates = ["2024-06-18", "2024-06-22"]; // 휴무
+            var fullyBookedDates = ["2024-06-23", "2024-06-24"]; // 예약마감
+
+            function highlightRedDates(date) {
+                var string = jQuery.datepicker.formatDate('yy-mm-dd', date);
+                if (peakSeasonDates.indexOf(string) != -1) {
+                    return [true, "peak-season", `${string}`];
+                }         
+                if (unavailableDates.indexOf(string) != -1) {
+                    return [false, " ui-state-disabled", `${string}`];
+                } 
+                if (fullyBookedDates.indexOf(string) != -1) {
+                    return [false, "fully-booked", `${string}`];
+                }  
+                return [true, '', `${string}`];
+            }
+
+            $('#datepicker').multiDatesPicker({
+                beforeShowDay: highlightRedDates,
+                onSelect: function(dateText) {
+                    console.log(dateText);
+                    var selectedDate = new Date(dateText);
+                    var formattedDate = formatDateToString(selectedDate);
+                    clickCount++;
+
+                    if (clickCount % 2 === 1) {
+                        $(this).multiDatesPicker('resetDates');
+                        startDate = dateText;
+                        $('#startDate, #endDate').text(formattedDate);
+                        $('#reservdate1, #reservdate2').val(dateText);
+                    } else {
+                        var range = getDates(startDate, dateText);
+                        var disabledDatesBetween = isDateDisabled(range);
+
+                        if (disabledDatesBetween ||  new Date(dateText) < new Date(startDate) ) {
+                        $(this).multiDatesPicker('resetDates');
+                        startDate = dateText;
+                        clickCount=1;
+                        $('#startDate, #endDate').text(formattedDate);
+                        $('#reservdate1, #reservdate2').val(dateText);
+                        return false;
+                        }
+                
+                        $(this).multiDatesPicker('addDates', range);
+                        startDate = null;
+                        $('#endDate').text(formattedDate);    
+                        $('#reservdate2').val(dateText);    
+                    }
+                    
+                    if (peakSeasonDates.indexOf(dateText) !== -1 ) {
+                        alert("성수기 기간이므로 추첨을 통해 확정자를 발표할 예정입니다.");
+                    }
+
+                    setTimeout(function(){
+                        var highlightedDates = $('td.ui-state-highlight');      
+                        highlightedDates.addClass('on'); 
+                        highlightedDates.first().addClass('first');
+                        highlightedDates.last().addClass('last');
+                    })
+                }
+            });
+
+        }
+
+        function getDates(startDate, endDate) {
+            var dates = [],
+            currentDate = new Date(startDate),
+            addDays = function(days) {
+                var date = new Date(this.valueOf());
+                date.setDate(date.getDate() + days);
+                return date;
+            };
+
+            while (currentDate <= new Date(endDate)) {
+            dates.push($.datepicker.formatDate('yy-mm-dd', currentDate));
+            currentDate = addDays.call(currentDate, 1);
+            }
+
+            return dates;
+        }
+
+        function isDateDisabled(dates) {
+            var allDates = $('.ui-datepicker-calendar').find('td');
+            var isTrue = false;
+
+            allDates.each(function() {
+            var _day = $(this);
+            var dateString = _day.attr('title');
+            if (  (dates.indexOf(dateString) != -1) && _day.hasClass('ui-state-disabled')) {
+                isTrue = true;
+            }
+            });
+
+            return isTrue;
+        }
+
+        function todaySet() {
+            var today = new Date();
+            var formattedDate = formatDateToString(today);
+            $('#startDate, #endDate').text(formattedDate);
+        }
+
+        function formatDateToString(date) {
+            const days = ['일', '월', '화', '수', '목', '금', '토'];
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0'); 
+            const day = String(date.getDate()).padStart(2, '0'); 
+            const dayOfWeek = days[date.getDay()]; 
+
+            return `${year} - ${month} - ${day}(${dayOfWeek})`;
+        }
+
+        function dateReset() {
+            todaySet();
+            $('#datepicker').multiDatesPicker('resetDates');
+            $('#datepicker').multiDatesPicker('destroy');
+            init();
+        }
+    </script>
+</body>
+</html>

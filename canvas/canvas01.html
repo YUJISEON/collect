@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YUJISEON Collect</title>
+    <link rel="stylesheet" href="../css/rest.css">
+    <link rel="stylesheet" href="../css/common.css">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
+    <style>
+        .section .section-body { max-width: 100%; padding: 0px;}
+        .section .section-body .section-inner { padding: 0; }
+        
+        #certificate { width: 2480px; height: 3508px;  padding: 105px 100px; box-sizing: border-box;  color: #000; background-repeat: no-repeat;  background-position: 50% 50%;}
+        #certificate .inner { width: 100%; height: 100%; border: 3px solid; padding: 100px 50px; font-size: 4.9rem; line-height: 50px; position: relative; box-sizing: border-box;}
+        #certificate .inner .tit .le { float: left; } 
+        #certificate .inner .tit .le h1 { line-height: 180px; border-top: 2px solid;}
+        #certificate .inner .tit .ri { float: right;} 
+        #certificate .inner .summary ul li { float: left; width: 50%; line-height: 70px;}
+        #certificate .inner .summary ul li p { display: inline-block; width: 75%; padding: 5px; box-sizing: border-box; color: #000;  }
+        #certificate .inner .summary ul li .bg { background: #1ea292; color: #000; }
+        #certificate .inner .summary ul li p.bg b  { color: #000;}
+        #certificate .inner .summary ul li p.bg span { color: #000;}
+        #certificate .inner .summary ul li b { float: left; width: 320px; color: #000; }
+        #certificate .inner .summary ul li span { float: left; width: calc(100% - 320px); color: #000; }
+        #certificate .inner .list_wrap { width: calc(100% + 300px);  position: relative;  left: -150px; background: #fff; padding: 50px;  box-sizing: border-box;}
+        #certificate .inner .pdf_list1 { background: #1ea292; color: #000; padding: 20px;}
+        #certificate .inner .pdf_list1 table { max-width: 2170px;  margin: 0 auto; }
+        #certificate .inner .pdf_list1 th, #certificate .inner .pdf_list1 td { color: #000;  padding: 10px 5px; line-height: 80px; font-weight: 500; font-size: 5.0rem;}
+        #certificate .inner .pdf_list1 tbody tr { border-top: 2px solid; border-bottom: 2px solid;}
+        #certificate .inner .pdf_list1 tbody tr td {  height: 200px; vertical-align: top; text-align: center; }
+        #certificate .inner .pdf_list1 thead tr.kr th, #certificate .inner .pdf_list1 thead tr.kr td { opacity: 0; visibility: hidden;} 
+
+        #certificate .inner .request { margin-top: 20px; line-height: 65px;}
+        #certificate .inner .request h3 { font-size: 8.0rem; font-weight: 700;}
+
+        #certificate .inner .pdf_list2 { margin-top: 50px;}
+        #certificate .inner .pdf_list2 table {border:1px solid #b8b8b8; border-collapse:separate; border-spacing:0;}
+        #certificate .inner .pdf_list2 table th{ height: 110px; padding:15px 15px; font-size:4.5rem; font-weight:600;  text-align: center; background:#f9f9f9; color:#111; border-bottom:1px solid #e3e3e3; box-sizing:border-box;}
+        #certificate .inner .pdf_list2 table tr:last-of-type th{ border-bottom: 1px solid #e3e3e3;     border-left: 1px solid #e8e8e8; }
+        #certificate .inner .pdf_list2 table td{padding:5px 15px;  height: 110px; font-size:4.5rem;  text-align: center; border-left: 1px solid #e3e3e3; border-bottom:1px solid #e3e3e3;}
+        #certificate .inner .pdf_list2 table tbody tr:last-of-type th,
+        #certificate .inner .pdf_list2 table tbody tr:last-of-type td{ border-bottom: none; }
+
+        #certificate .inner .btm {position: absolute;  left: 50px;  bottom: 100px;  width: calc(100% - 100px); }
+        #certificate.en .inner .btm  {bottom: 200px;  }
+        #certificate .inner .info { margin-top: 50px;  position: relative;}
+        #certificate .inner .info ul li { float: left; width: 100%; line-height: 70px;}
+        #certificate .inner .info ul li p { display: inline-block; width: 100%; padding: 5px; box-sizing: border-box; }
+        #certificate .inner .info ul li p.bg { background: #1ea292;}
+        #certificate .inner .info ul li b { float: left; width: 320px;}
+        #certificate .inner .info ul li span { float: left; width: calc(100% - 320px);}
+        #certificate.en .inner .info ul li b { width: 400px;  }
+        #certificate.en .inner .info ul li span { width: calc(100% - 400px); }
+
+        #certificate .inner .info .ab { position: absolute; top: -10px; left: 520px;}
+        #certificate.en .inner .info .ab { top: -50px;  left: 705px; }
+        #certificate .inner .info + p { position: absolute; right: 0; top: 0; font-size: 15.0rem; line-height: 130px; font-weight: 900; text-align: right;}
+
+        .txt_l { text-align: left; padding-left: 20px !important;}
+        .txt_r { text-align: right; }
+    </style>
+</head>
+<body>
+    <section class="section">
+        <div class="section-body">
+            <div class="section-inner">
+                <div class="cont-area"> 
+                    <div class="pdfWrap en" id="certificate">
+                        <div class="inner">
+                            <div class="top">
+                                <div class="tit clear">
+                                    <div class="le">
+                                        <h1>Purchace Order</h1>
+                                    </div>
+                                    <div class="ri">
+                                        <img src="" alt="" width="250">
+                                    </div>
+                                </div>
+                                <div class="summary">
+                                    <ul class="clear">
+                                        <li><p class="clear"><b class="bg">PO Number</b><span class="bg"></span></p></li>
+                                        <li><p class="clear"><b>PM</b><span></span></p></li>
+                                        <li><p class="clear"><b>TRANSLATOR</b><span></span></p></li>
+                                        <li><p class="clear"><b>DATE OF ISSUE</b><span></span></p></li>
+                                        <li><p class="clear"><b>LANGUAGE</b><span></span></p></li>                      
+                                        <li><p class="clear"><b>DEADLINE</b><span></span></p></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="mid">
+                                <div class="list_wrap">
+                                    <div class="pdf_list pdf_list1">
+                                        <table>
+                                            <caption>리스트</caption>
+                                            <colgroup>
+                                                <col width="30%" />
+                                                <col width="17.5%" />
+                                                <col width="17.5%" />
+                                                <col width="17.5%" />
+                                                <col width="17.5%" />
+                                            </colgroup>
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col" class="txt_l">ITEM DECSRIPTION</th>
+                                                    <th scope="col">WORD/CHA</th>
+                                                    <th scope="col">QTY</th>
+                                                    <th scope="col">RATE</th>
+                                                    <th scope="col">TOTAL</th>
+                                                </tr>
+                                                <tr class="kr">
+                                                    <th scope="col" class="txt_l">프로젝트명</th>
+                                                    <th scope="col">구분</th>
+                                                    <th scope="col">분량</th>
+                                                    <th scope="col">단가</th>
+                                                    <th scope="col">금액</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td class="txt_l"></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td>&nbsp;₩  </td>
+                                                    <td>&nbsp;₩  </td>
+                                                </tr>
+                                            </tbody>
+                                            <tfoot>
+                                                <tr>
+                                                    <th colspan="4" class="txt_r">SUB TOTAL</th>
+                                                    <td class="txt_r">&nbsp;₩ </td>
+                                                </tr>
+                                                <tr>
+                                                    <th colspan="4" class="txt_r">TAX (3.3%)</th>
+                                                    <td class="txt_r">&nbsp;₩ </td>
+                                                </tr>
+                                                <tr>
+                                                    <th colspan="4" class="txt_r">GRAND TOTAL</th>
+                                                    <td class="txt_r">&nbsp;₩ </td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="request">
+                                    <p>N/A</p>
+                                    <p>REMARK</p>
+                                    <ul>
+                                        <li>1. Please check your schedule and keep the due date and time.</li>
+                                        <li>2. This project includes classified informations about the client.<br>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;Any informations leak to a third party goes against the Confidentiality Clause,  <br>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;so we ask you to pay special attention.</li>
+                                        <li>3. Please so not change the name of the translated file and send it back to us by adding '_tr' to the title. </li>
+                                        <li>4. For questions problems regarding the project please contact the reponsible PM</li>
+                                    </ul>
+                                </div>
+                                <div class="pdf_list pdf_list2">
+                                    <table>
+                                        <caption>리스트</caption>
+                                        <colgroup>
+                                            <col width="12.5%" />
+                                            <col width="12.5%" />
+                                            <col width="12.5%" />
+                                            <col width="12.5%" />
+                                            <col width="12.5%" />
+                                            <col width="12.5%" />
+                                            <col width="12.5%" />
+                                            <col width="12.5%" />
+                                        </colgroup>
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">Cat Count</th>
+                                                <th scope="col">Repetitions</th>
+                                                <th scope="col">100%</th>
+                                                <th scope="col">99~95%</th>
+                                                <th scope="col">94~85%</th>
+                                                <th scope="col">84~75%</th>
+                                                <th scope="col">74~50%</th>
+                                                <th scope="col">No Match</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <th>Word</th>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                            </tr>
+                                            <tr>
+                                                <th>%</th>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Sub-Total</th>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Total</th>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="btm clear">
+                                <div class="info">
+                                    <ul>
+                                        <li><p><b>Company</b><span>DoubleKnew Co.</span></p></li>
+                                    </ul>
+                                    <span class="ab"><img src="" alt="" width="200"></span>
+                                </div>
+                                <p>THANK<br>YOU</p>
+                            </div>
+                        </div>		
+                    </div>
+                    <!-- //contents -->
+                    <iframe id="pdfdown" name="pdfdown" style="width:0px;height:0px;"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js"></script>
+	<script type="text/javascript" src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <script>
+        $(function(){
+            // html2canvas(document.body, {
+            //     allowTaint: true,
+            //     foreignObjectRendering: true
+            // });
+
+            savePDF();
+            savePDF2();
+        });
+
+        function savePDF(){
+            html2canvas($('#certificate')[0] ,{	
+                allowTaint : true,	// cross-origin allow 
+                useCORS: true,		// CORS 사용한 서버로부터 이미지 로드할 것인지 여부
+                //scale : 2,			// 기본 96dpi에서 해상도를 두 배로 증가
+
+            }).then(function(canvas) {	
+                // 캔버스를 이미지로 변환
+                var imgData = canvas.toDataURL('image/jpeg');
+
+                var imgWidth = 210; // 이미지 가로 길이(mm) / A4 기준 210mm
+                var pageHeight = imgWidth * 1.414;  // 출력 페이지 세로 길이 계산 A4 기준
+                var imgHeight = canvas.height * imgWidth / canvas.width;
+                var heightLeft = imgHeight;
+                var margin = 0; // 출력 페이지 여백설정
+                var doc = new jsPDF('p', 'mm');
+                var position = 0;
+
+                // 첫 페이지 출력
+                doc.addImage(imgData, 'JPG', margin, position, imgWidth, imgHeight);
+                heightLeft -= pageHeight;
+
+                // 한 페이지 이상일 경우 루프 돌면서 출력
+                while (heightLeft >= 20) {			// 35
+                    position = heightLeft - imgHeight;
+                    position = position - 20 ;		// -25
+
+                    doc.addPage();
+                    doc.addImage(imgData, 'JPG', margin, position, imgWidth, imgHeight);
+                    heightLeft -= pageHeight;
+                }
+
+                // 파일 저장
+                doc.save('pdfname.pdf');
+                alert("성공적으로 PDF가 생성되었습니다. ");
+            });
+        }
+
+        function savePDF2() {
+            let fileName = "KCRO_Certificate"
+            getPDF(fileName);
+        }
+
+        function getPDF(fileName){
+            var HTML_Width = 210;
+            var HTML_Height = HTML_Width * 1.414;
+            var top_left_margin = 0;
+            var PDF_Width = HTML_Width;
+            var PDF_Height = (PDF_Width*1);
+            var canvas_image_width = HTML_Width;
+            var canvas_image_height = HTML_Height;
+
+            var totalPDFPages = Math.ceil(HTML_Height/PDF_Height)-2;
+
+            html2canvas($("#certificate")[0], { 
+                allowTaint:true,
+            }).then(function(canvas) {
+                canvas.getContext('2d');
+                var imgData = canvas.toDataURL("image/jpeg", 1.0);
+                var pdf = new jsPDF('p', 'mm', "a4");
+                pdf.addImage(imgData, 'JPG', top_left_margin, top_left_margin,canvas_image_width,canvas_image_height);
+
+                for (var i = 1; i <= totalPDFPages; i++) { 
+                    pdf.addPage(PDF_Width, PDF_Height);
+                    pdf.addImage(imgData, 'JPG', top_left_margin, -(PDF_Height*i)+(top_left_margin*4),canvas_image_width,canvas_image_height);
+                }
+                
+                pdf.save(fileName + ".pdf");
+                alert("성공적으로 PDF가 생성되었습니다. ");
+            });
+        };
+    </script>
+</body>
+</html>

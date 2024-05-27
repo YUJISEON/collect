@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YUJISEON Collect</title>
+    <link rel="stylesheet" href="../css/rest.css">
+    <link rel="stylesheet" href="../css/common.css">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="./calendar.css">
+</head>
+<body>
+    <section class="section">
+        <div class="section-body">
+            <div class="section-inner">
+                <div class="cont-area"> 
+                    <div class="datepicker-area">    
+                        <div class="inner">              
+                            <div id="datepicker" class="calendar"></div> 
+                            <ul class="day-state mt-20">
+                                <li><b class="full"></b><span>예약마감</span></li>
+                                <li><b class="disabled"></b><span>휴무</span></li>
+                            </ul>  
+                            <input type="hidden" name="reservdate" id="reservdate" value="">
+                        </div>      
+                    </div> 
+                </div>
+            </div>
+        </div>
+    </div>  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="../js/jquery-ui.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-ui-multidatespicker/1.6.6/jquery-ui.multidatespicker.min.js"></script>
+    <script>
+        $(function(){
+            // 기본 설정
+            $.datepicker.setDefaults({
+                dateFormat: 'yy-mm-dd',
+                prevText: '이전 달',
+                nextText: '다음 달',
+                monthNames: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
+                monthNamesShort: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
+                dayNames: ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'],
+                dayNamesShort: ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'],
+                dayNamesMin: ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'],
+                showMonthAfterYear: true,
+                yearSuffix: '년',
+                showOtherMonths: true,
+                selectOtherMonths: true
+            });
+
+            // Datepicker 초기화
+            $("#datepicker").datepicker({
+                firstDay: 0,
+                minDate: 0
+            });
+
+            /// 비활성화할 날짜 배열
+            var unavailableDates = ["2024-06-18", "2024-06-20"]; // 휴무
+            var fullyBookedDates = ["2024-06-24", "2024-06-25"]; // 예약마감
+
+            // 특정 날짜 강조
+            function highlightRedDates(date) {
+                var day = date.getDay();
+                var dateString = $.datepicker.formatDate('yy-mm-dd', date);
+
+                if (day === 0 || day === 6) return [false];
+                if (fullyBookedDates.includes(dateString)) return [false, "fully-booked"];
+                if (unavailableDates.includes(dateString)) return [false, "ui-state-disabled"];
+
+                return [true];
+            }
+
+            // multiDatesPicker 초기화 및 설정
+            $('#datepicker').multiDatesPicker({
+                beforeShowDay: highlightRedDates,
+                onSelect: function(dateText) {  
+                    $("#reservdate").val(dateText);
+                    $(this).multiDatesPicker('resetDates');
+                }
+            });
+        })
+    </script>
+</body>
+</html>
